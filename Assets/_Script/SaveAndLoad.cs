@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 
 public class SaveAndLoad : MonoBehaviour
@@ -27,6 +28,9 @@ public class SaveAndLoad : MonoBehaviour
     public GameObject saveCanvas;
 
     [SerializeField]
+    public GameObject helpCanvas;
+
+    [SerializeField]
     public GameObject saveNameCanvas;
 
     [SerializeField]
@@ -37,6 +41,9 @@ public class SaveAndLoad : MonoBehaviour
 
     [SerializeField]
     public TMP_InputField loadNameText;
+
+    [SerializeField]
+    public GameObject welcomeCanvas;
 
     BuildingState buildingState;
 
@@ -59,6 +66,14 @@ public class SaveAndLoad : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F) && GameObject.Find("welcome"))
+        {
+            killWelcome();
+        }
+    }
+
     public void closeLoader()
     {
         loadNameCanvas.SetActive(false);
@@ -76,6 +91,10 @@ public class SaveAndLoad : MonoBehaviour
         try
         {
             File.WriteAllText(path + name, content);
+            Debug.Log(pgd.gridCellsDictionary);
+            string json = JsonUtility.ToJson(pgd.gridCellsDictionary);
+            PlayerPrefs.SetString("name", json);
+            PlayerPrefs.Save();
             return true;
         }
         catch (Exception e)
@@ -96,6 +115,11 @@ public class SaveAndLoad : MonoBehaviour
         setSaveName();
     }
 
+    public void killWelcome()
+    {
+        welcomeCanvas.SetActive(false);
+    }
+
     public void setSaveName()
     {
         saveNameCanvas.SetActive(false);
@@ -107,6 +131,16 @@ public class SaveAndLoad : MonoBehaviour
         saveCanvas.SetActive(false);
     }
     
+    public void noHelp()
+    {
+        helpCanvas.SetActive(false);
+    }
+
+    public void helpMe()
+    {
+        helpCanvas.SetActive(true);
+    }
+
     public void selectName()
     {
         loadNameCanvas.SetActive(true);
@@ -264,5 +298,10 @@ public class SaveAndLoad : MonoBehaviour
         structurePlacer.clearMapper();
         pm.clearMap();
         SceneManager.LoadScene("PlacementSystem");
+    }
+
+    public void quitGame()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
