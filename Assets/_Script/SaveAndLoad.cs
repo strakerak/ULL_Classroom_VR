@@ -150,7 +150,7 @@ public class SaveAndLoad : MonoBehaviour
     {
         loadName = loadNameText.text;
         StaticData.dataToPass = loadName;
-        SceneManager.LoadScene("ViewerSystem");
+        SceneManager.LoadScene("VRViewerSystem");
 
     }
 
